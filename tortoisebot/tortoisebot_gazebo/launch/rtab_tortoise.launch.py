@@ -34,47 +34,40 @@ import os
 
 def launch_setup(context, *args, **kwargs):
     
-    
-    
-    # if not 'TURTLEBOT3_MODEL' in os.environ:
-    #     os.environ['TURTLEBOT3_MODEL'] = 'waffle'
-
-
-
-
     # Directories
-    pkg_turtlebot3_gazebo = get_package_share_directory(
+    pkg_tortoisebot_gazebo = get_package_share_directory(
         'tortoisebot_bringup')
     pkg_nav2_bringup = get_package_share_directory(
         'nav2_bringup')
-    pkg_rtabmap_demos = get_package_share_directory(
-        'rtabmap_demos')
+    pkg_rtabmap = get_package_share_directory(
+        'tortoisebot_gazebo')
 
     # world = LaunchConfiguration('world').perform(context)
     
     nav2_params_file = PathJoinSubstitution(
-        [FindPackageShare('rtabmap_demos'), 'params', 'turtlebot3_rgbd_nav2_params.yaml']
+        [FindPackageShare('tortoisebot_gazebo'), 'config', 'tortoise_nav2_param.yaml']
     )
 
     # Paths
     # gazebo_launch = PathJoinSubstitution(
-        # [pkg_turtlebot3_gazebo, 'launch', 'spawn_bot_in_world.launch.py'])
+        # [pkg_tortoisebot_gazebo, 'launch', 'spawn_bot_in_world.launch.py'])
     
     gazebo_launch = PathJoinSubstitution(
-        [pkg_turtlebot3_gazebo, 'launch', 'autobringup.launch.py'])
+        [pkg_tortoisebot_gazebo, 'launch', 'autobringup.launch.py'])
     nav2_launch = PathJoinSubstitution(
         [pkg_nav2_bringup, 'launch', 'navigation_launch.py'])
     rviz_launch = PathJoinSubstitution(
         [pkg_nav2_bringup, 'launch', 'rviz_launch.py'])
     rtabmap_launch = PathJoinSubstitution(
-        [pkg_rtabmap_demos, 'launch', 'turtlebot3', 'turtlebot3_rgbd.launch.py'])
+        [pkg_rtabmap, 'launch', 'tortoise_rgbd.launch.py'])
 
     # Includes
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([gazebo_launch]),
         launch_arguments=[
             ('x_pose', LaunchConfiguration('x_pose')),
-            ('y_pose', LaunchConfiguration('y_pose'))
+            ('y_pose', LaunchConfiguration('y_pose')),
+            ('use_sim_time', 'True')
         ]
     )
     
@@ -99,9 +92,6 @@ def launch_setup(context, *args, **kwargs):
         ]
     )
     
-    
-    
-    
     return [
         # Nodes to launch
         nav2,
@@ -121,7 +111,7 @@ def generate_launch_description():
         # DeclareLaunchArgument(
         #     'world', default_value='house',
         #     choices=['world', 'house', 'dqn_stage1', 'dqn_stage2', 'dqn_stage3', 'dqn_stage4'],
-        #     description='Turtlebot3 gazebo world.'),
+        #     description='tortoisebot gazebo world.'),
         
         DeclareLaunchArgument(
             'x_pose', default_value='-3.0',
