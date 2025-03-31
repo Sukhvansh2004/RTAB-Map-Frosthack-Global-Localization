@@ -31,7 +31,7 @@ from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
 
 def launch_setup(context, *args, **kwargs):
-    pkg_turtlebot3_gazebo = get_package_share_directory(
+    pkg_tortoisebot_gazebo = get_package_share_directory(
         'tortoisebot_gazebo')
     pkg_nav2_bringup = get_package_share_directory(
         'nav2_bringup')
@@ -41,12 +41,12 @@ def launch_setup(context, *args, **kwargs):
     # world = LaunchConfiguration('world').perform(context)
     
     nav2_params_file = PathJoinSubstitution(
-        [FindPackageShare('rtabmap_demos'), 'params', 'turtlebot3_rgbd_nav2_params.yaml']
+        [FindPackageShare('tortoisebot_gazebo'), 'config', 'tortoise_nav2_param.yaml']
     )
 
     # Paths
     gazebo_launch = PathJoinSubstitution(
-        [pkg_turtlebot3_gazebo, 'launch', 'spawn_rtab.launch.py'])
+        [pkg_tortoisebot_gazebo, 'launch', 'spawn_rtab.launch.py'])
     nav2_launch = PathJoinSubstitution(
         [pkg_nav2_bringup, 'launch', 'navigation_launch.py'])
     rviz_launch = PathJoinSubstitution(
@@ -102,7 +102,7 @@ def generate_launch_description():
         # DeclareLaunchArgument(
         #     'world', default_value='house',
         #     choices=['world', 'house', 'dqn_stage1', 'dqn_stage2', 'dqn_stage3', 'dqn_stage4'],
-        #     description='Turtlebot3 gazebo world.'),
+        #     description='tortoisebot gazebo world.'),
         
         DeclareLaunchArgument(
             'x_pose', default_value='-3.0',
