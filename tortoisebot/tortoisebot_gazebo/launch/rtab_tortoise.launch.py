@@ -34,6 +34,7 @@ import os
 
 def launch_setup(context, *args, **kwargs):
     
+    use_sim_time=LaunchConfiguration('use_sim_time')
     # Directories
     pkg_tortoisebot_gazebo = get_package_share_directory(
         'tortoisebot_bringup')
@@ -53,7 +54,7 @@ def launch_setup(context, *args, **kwargs):
         # [pkg_tortoisebot_gazebo, 'launch', 'spawn_bot_in_world.launch.py'])
     
     gazebo_launch = PathJoinSubstitution(
-        [pkg_tortoisebot_gazebo, 'launch', 'autobringup.launch.py'])
+        [pkg_tortoisebot_gazebo, 'launch', 'bringup.launch.py'])
     nav2_launch = PathJoinSubstitution(
         [pkg_nav2_bringup, 'launch', 'navigation_launch.py'])
     rviz_launch = PathJoinSubstitution(
@@ -65,9 +66,7 @@ def launch_setup(context, *args, **kwargs):
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([gazebo_launch]),
         launch_arguments=[
-            ('x_pose', LaunchConfiguration('x_pose')),
-            ('y_pose', LaunchConfiguration('y_pose')),
-            ('use_sim_time', 'True')
+            ('use_sim_time', use_sim_time)
         ]
     )
     
@@ -75,7 +74,7 @@ def launch_setup(context, *args, **kwargs):
     nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([nav2_launch]),
         launch_arguments=[
-            ('use_sim_time', 'True'),
+            ('use_sim_time', use_sim_time),
             ('params_file', nav2_params_file)
         ]
     )
@@ -88,7 +87,7 @@ def launch_setup(context, *args, **kwargs):
         PythonLaunchDescriptionSource([rtabmap_launch]),
         launch_arguments=[
             ('localization', LaunchConfiguration('localization')),
-            ('use_sim_time', 'True')
+            ('use_sim_time', use_sim_time)
         ]
     )
     
@@ -105,21 +104,12 @@ def generate_launch_description():
         
         # Launch arguments
         DeclareLaunchArgument(
-            'localization', default_value='false',
+            'localization', default_value='False',
             description='Launch in localization mode.'),
 
-        # DeclareLaunchArgument(
-        #     'world', default_value='house',
-        #     choices=['world', 'house', 'dqn_stage1', 'dqn_stage2', 'dqn_stage3', 'dqn_stage4'],
-        #     description='tortoisebot gazebo world.'),
-        
         DeclareLaunchArgument(
-            'x_pose', default_value='-3.0',
-            description='Initial position of the robot in the simulator.'),
-        
-        DeclareLaunchArgument(
-            'y_pose', default_value='2.0',
-            description='Initial position of the robot in the simulator.'),
+            'use_sim_time', default_value='True',
+            description='Launch in simulation mode.'),
 
         OpaqueFunction(function=launch_setup)
     ])

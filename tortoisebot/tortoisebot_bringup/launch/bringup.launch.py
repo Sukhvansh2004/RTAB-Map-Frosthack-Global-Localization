@@ -76,8 +76,8 @@ def generate_launch_description():
                                             description='Absolute path to rviz config file'),
     rviz_node,
     state_publisher_launch_cmd,
-    robot_state_publisher_node,
-    joint_state_publisher_node,
+    # robot_state_publisher_node,
+    # joint_state_publisher_node,
     differential_drive_node,
     gazebo_launch_cmd,
     camera_node
