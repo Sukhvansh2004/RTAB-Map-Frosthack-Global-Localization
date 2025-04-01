@@ -239,23 +239,4 @@ Click the image to view the demo video!
 
 ---
 
-## **Performance Considerations**  
 
-- **Mapping and Localization Efficiency**: Ensure that sensor data rates and processing parameters are tuned for your hardware capabilities.  
-- **Memory Management**: Use downsampling and resolution adjustments to balance mapping fidelity and computational load.  
-
----
-
-## **License**  
-
-This project is open-source under the **MIT License**.  
-
-🚀 **Happy Mapping and Localization!** 🚀
-
----
-
-### **Notes on Image Paths**  
-- Ensure that the images `mapping_loop_closure.png` and `proper_localization.png` are placed inside an **`images/`** folder within your repository.  
-- Verify that the image paths are correct so that GitHub can display them properly.
-
-Feel free to adjust any details as needed for your specific setup!
