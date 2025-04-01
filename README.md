@@ -1,6 +1,3 @@
-Below is the updated full **README.md** file with all the requested modifications, including the YouTube demo, loop closure image, and proper localization image.
-
----
 
 # **Autonomous Initial Localization with RTAB-Map**  
 
