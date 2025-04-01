@@ -116,7 +116,7 @@ cd ~/ros2_ws/src
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/autonomous_initial_localization.git
+https://github.com/Sukhvansh2004/RTAB-Map-Frosthack-Global-Localization.git
 ```
 
 ### 3. Install RTAB-Map ROS Package
@@ -160,7 +160,7 @@ Mapping mode allows the robot to autonomously explore and build a comprehensive 
 #### Launch Mapping
 
 ```bash
-ros2 launch autonomous_initial_localization rtab_tortoise.launch.py
+ros2 launch tortoise_gazebo rtab_tortoise.launch.py
 ```
 
 #### Configuration Options
@@ -174,7 +174,7 @@ ros2 launch autonomous_initial_localization rtab_tortoise.launch.py
 Generated maps are stored in `~/.ros/rtabmap.db` by default. To specify a custom location:
 
 ```bash
-ros2 launch autonomous_initial_localization rtab_tortoise.launch.py 
+ros2 launch tortoise_gazebo rtab_tortoise.launch.py 
 ```
 
 ### Localization Mode
@@ -184,7 +184,7 @@ Once mapping is complete, the saved map is used for efficient localization withi
 #### Launch Localization
 
 ```bash
-ros2 launch autonomous_initial_localization rtab_tortoise.launch.py localization:=True 
+ros2 launch tortoise_gazebo rtab_tortoise.launch.py localization:=True 
 ```
 
 ## System Architecture
