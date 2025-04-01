@@ -194,14 +194,6 @@ The system architecture is modular and integrates several key components:
 - **Map Server**: Provides map data to navigation components.
 - **Navigation Stack**: Leverages Nav2 for path planning and obstacle avoidance.
 
-### Data Flow
-
-1. **Sensor Data Acquisition**: RGB-D images, LiDAR scans, and wheel odometry are collected from robot sensors.
-2. **Multi-Modal Processing**: Visual features and LiDAR point clouds are processed in parallel.
-3. **Sensor Fusion**: Data from different sensors are aligned and fused using calibrated transformations.
-4. **Loop Closure Detection**: Previously visited locations are identified to correct accumulated drift.
-5. **Pose Graph Optimization**: The map structure is continuously refined for accuracy.
-6. **Localization Output**: Precise 6-DoF pose estimates are published to the ROS network.
 
 ### Integration Diagram
 
@@ -225,17 +217,6 @@ The system architecture is modular and integrates several key components:
                      └───────────────────────────────────────┘
 ```
 
-## Performance Considerations
-
-### Optimization Guidelines
-
-- **Processing Requirements**: RTAB-Map with LiDAR integration is computationally intensive. Consider using a dedicated GPU for real-time operation on large maps.
-- **Memory Usage**: Large environments may require 8+ GB of RAM. Monitor memory consumption during extended mapping sessions.
-- **Camera Calibration**: Proper RGB-D camera calibration is essential for accurate mapping. Use the provided calibration utilities.
-- **LiDAR-Camera Calibration**: The extrinsic calibration between the LiDAR and camera is critical for proper fusion. Use the `lidar_camera_calibration` tool included in the package.
-- **Loop Closure Frequency**: Adjust the loop closure detection parameters based on environment characteristics:
-  - `Rtabmap/DetectionRate`: 2.0 for feature-rich environments, 1.0 for sparse environments.
-  - `Rtabmap/MemoryThr`: 50-100 for large areas, 30-50 for smaller spaces.
 
 ### Real-World vs. Simulation
 
