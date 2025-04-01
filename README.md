@@ -1,121 +1,92 @@
-# Autonomous Initial Localization with RTAB-Map
 
-This repository implements an autonomous initial localization approach using visual SLAM with RTAB-Map. Unlike traditional approaches requiring teleoperation before localization, this stack autonomously localizes the robot by building a detailed 3D map of its environment. The implementation is designed to work in both Gazebo simulation environments and on physical robot hardware.
+# **Autonomous Initial Localization with RTAB-Map**  
 
-## Table of Contents
+This repository implements an **autonomous initial localization approach** using **visual SLAM** with **RTAB-Map**. Unlike traditional approaches requiring **teleoperation before localization**, this stack autonomously localizes the robot by building a detailed **3D map** of its environment. The implementation is designed to work in both **Gazebo simulation environments** and **physical robot hardware**.  
 
-- [Overview](#overview)
-- [RTAB-Map Technology](#rtab-map-technology)
-- [System Requirements](#system-requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Mapping Mode](#mapping-mode)
-  - [Localization Mode](#localization-mode)
-- [System Architecture](#system-architecture)
-- [Performance Considerations](#performance-considerations)
-- [Troubleshooting](#troubleshooting)
+## **Table of Contents**  
 
-## Overview
+- [Overview](#overview)  
+- [RTAB-Map Technology](#rtab-map-technology)  
+- [System Requirements](#system-requirements)  
+- [Installation](#installation)  
+- [Usage](#usage)  
+  - [Mapping Mode](#mapping-mode)  
+  - [Localization Mode](#localization-mode)  
+- [System Architecture](#system-architecture)  
+- [Performance Considerations](#performance-considerations)  
+- [Troubleshooting](#troubleshooting)  
 
-This project leverages RTAB-Map (Real-Time Appearance-Based Mapping) to perform visual SLAM using an RGB-D camera. While RTAB-Map primarily uses visual data, our implementation has been enhanced by integrating LiDAR sensors to improve mapping accuracy and reliability. This multi-sensor approach provides robust performance in environments with varying lighting conditions or limited visual features. The system autonomously creates a detailed 3D map of the environment and uses that map for accurate localization without manual teleoperation.
+---
 
-## RTAB-Map Technology
+## **Overview**  
 
-RTAB-Map is an advanced graph-based SLAM framework designed for robust long-term and large-scale mapping in dynamic environments. Key capabilities include:
+This project leverages **RTAB-Map (Real-Time Appearance-Based Mapping)** to perform **visual SLAM** using an **RGB-D camera**. Our implementation is enhanced by integrating **LiDAR sensors** to improve mapping accuracy and reliability.  
 
-### Core Features
+This **multi-sensor approach** ensures robust performance in environments with:  
+- Varying lighting conditions  
+- Limited visual features  
+- Large-scale, complex environments  
 
-- **Graph-Based SLAM Architecture**: Implements a sophisticated pose-graph representation where nodes represent keyframes and edges represent spatial transformations between them.
-- **Loop Closure Detection**: Utilizes a hierarchical Bag-of-Words (BoW) approach with SURF/SIFT features to recognize previously visited locations, enabling precise drift correction.
-- **Multi-Sensor Fusion**: Seamlessly integrates data from RGB-D cameras, LiDAR sensors, stereo cameras, and IMU sensors for enhanced mapping accuracy.
-- **Memory-Efficient Processing**: Employs a novel memory management system that intelligently handles large-scale environments by keeping only relevant map sections in active memory.
+The system autonomously:  
+1. **Creates a detailed 3D map** of the environment.  
+2. **Uses that map for accurate localization** without manual teleoperation.  
 
-### LiDAR Integration
+---
 
-Although RTAB-Map is primarily known for visual SLAM, our implementation leverages LiDAR sensors to:
-- Provide accurate depth measurements in environments with challenging lighting conditions
-- Enhance feature detection in visually homogeneous environments
-- Improve mapping precision with high-resolution point clouds
-- Enable reliable localization in low-texture scenarios
+## **RTAB-Map Technology**  
 
-The fusion of RGB-D and LiDAR data is performed using RTAB-Map's multi-sensor registration capabilities, resulting in more accurate and complete environmental maps than either sensor could provide independently.
+RTAB-Map is a **graph-based SLAM framework** designed for robust **long-term and large-scale mapping** in dynamic environments.  
 
+### **Core Features**  
 
-### Loop Closure and Navigation in Detail
+- **Graph-Based SLAM Architecture**:  
+  - Uses a **pose-graph representation** where **nodes represent keyframes** and **edges represent transformations** between them.  
+- **Loop Closure Detection**:  
+  - Detects previously visited locations using a **Bag-of-Words (BoW) approach** with **SURF/SIFT** features, correcting **pose drift**.  
+- **Multi-Sensor Fusion**:  
+  - Supports **RGB-D cameras, LiDAR, stereo cameras, and IMU sensors** for enhanced accuracy.  
+- **Memory-Efficient Processing**:  
+  - Uses **intelligent memory management** to handle **large-scale environments** by keeping only relevant map sections in active memory.  
 
-#### Loop Closure Detection
+### **LiDAR Integration**  
 
-Loop closure is a critical component of RTAB-Map that corrects accumulated drift and ensures map consistency. The process works as follows:
+Even though RTAB-Map is primarily **visual SLAM**, our implementation integrates **LiDAR sensors** to:  
+✅ **Improve depth accuracy** in low-light conditions.  
+✅ **Enhance mapping in feature-poor environments** (e.g., plain walls).  
+✅ **Provide high-resolution point clouds** for precise localization.  
+✅ **Ensure robustness in dynamic environments**.  
 
-1. **Feature Extraction**: Visual features (typically SURF or SIFT) are extracted from keyframes and converted into a Bag-of-Words representation.
-2. **Vocabulary Matching**: Each new frame is compared against a vocabulary tree built from previously observed features.
-3. **Candidate Selection**: Potential loop closure candidates are identified based on feature similarity scores.
-4. **Geometric Verification**: 
-   - RANSAC-based verification validates spatial consistency between matched frames.
-   - 3D-to-3D correspondence establishes transformation between current and past poses.
-   - Outlier rejection filtering removes false positives.
-5. **Pose Graph Optimization**: 
-   - When a loop closure is detected, a constraint is added to the pose graph.
-   - The graph is optimized using g2o or GTSAM optimization frameworks.
-   - The entire map is adjusted to maintain global consistency.
-6. **Adaptive Thresholding**: 
-   - The system dynamically adjusts matching thresholds based on environment characteristics.
-   - Parameters like `Rtabmap/LoopClosureReextractFeatures` and `Rtabmap/LoopClosureTimeThreshold` fine-tune the process.
+The fusion of **RGB-D and LiDAR data** is performed using **RTAB-Map’s multi-sensor registration**, creating a **more complete** and **accurate environmental map** than either sensor alone.  
 
-Our implementation enhances loop closure by incorporating LiDAR scan matching alongside visual feature matching, providing redundant verification and improving reliability in feature-poor environments.
+---
 
-#### Navigation Framework
+## **System Requirements**  
 
-RTAB-Map's outputs are tightly integrated with the Navigation2 (Nav2) stack, providing:
+### **Software Prerequisites**  
+- **ROS 2 Humble Hawksbill** (Full desktop installation recommended)  
+- **Navigation2 (Nav2) Stack** (for autonomous navigation)  
+- **Gazebo Classic** (Version 11.10.0 or newer for simulation)  
+- **RViz2** (for visualization and monitoring)  
+- **RTAB-Map ROS Package** (Version 0.21.0 or newer)  
 
-1. **Global Planning**:
-   - The RTAB-Map generated map is used to create a global costmap.
-   - Nav2's global planner (A*, Dijkstra, or NavFn) computes optimal paths through the environment.
-   - Map updates from RTAB-Map are dynamically incorporated into planning.
-2. **Local Planning**:
-   - TEB (Timed Elastic Band) and DWB (Dynamic Window Approach) planners use RTAB-Map's local point clouds.
-   - Proximity information from both visual features and LiDAR is fused into the local costmap.
-   - Dynamic obstacle avoidance leverages real-time sensor data.
-3. **Recovery Behaviors**:
-   - When localization confidence decreases, RTAB-Map triggers specific recovery behaviors.
-   - These include rotating in place to gather more features or backtracking to known locations.
-   - The `Rtabmap/RecoveryMaxDistance` parameter controls when recovery is initiated.
-4. **Localization Confidence Metrics**:
-   - Inlier feature count provides a measure of registration quality.
-   - Covariance matrices estimate pose uncertainty.
-   - LiDAR ICP (Iterative Closest Point) matching scores complement visual confidence.
-5. **Adaptive Navigation Parameters**:
-   - Path planning parameters adjust based on localization confidence.
-   - Lower confidence triggers more conservative navigation behaviors.
-   - Hybrid driving modes combine reactive and map-based navigation strategies.
+---
 
+## **Installation**  
 
-
-## Software Prerequisites
-- **ROS 2 Humble Hawksbill**: Full desktop installation recommended
-- **Navigation2 Stack**: Complete Nav2 framework for autonomous navigation
-- **Gazebo Classic**: Version 11.10.0 or newer for simulation
-- **RViz2**: For visualization and monitoring
-- **RTAB-Map ROS Package**: Version 0.21.0 or newer
-
-## Installation
-
-### 1. Set Up Your ROS 2 Workspace
+### **1. Set Up Your ROS 2 Workspace**  
 
 ```bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 ```
 
-### 2. Clone the Repository
+### **2. Clone the Repository**  
 
 ```bash
-https://github.com/Sukhvansh2004/RTAB-Map-Frosthack-Global-Localization.git
+git clone https://github.com/Sukhvansh2004/RTAB-Map-Frosthack-Global-Localization.git
 ```
 
-### 3. Install RTAB-Map ROS Package
-
-For proper installation of RTAB-Map in ROS 2 Humble, follow the official instructions from the RTAB-Map repository:
+### **3. Install RTAB-Map ROS Package**  
 
 ```bash
 cd ~/ros2_ws/src
@@ -124,9 +95,10 @@ git clone --branch ros2 https://github.com/introlab/rtabmap_ros.git
 cd ..
 ```
 
-For more information and detailed installation instructions, visit the official RTAB-Map ROS repository: https://github.com/introlab/rtabmap_ros/tree/ros2#rtabmap_ros
+For detailed installation instructions, visit the official RTAB-Map ROS repository:  
+🔗 **[RTAB-Map ROS GitHub](https://github.com/introlab/rtabmap_ros/tree/ros2#rtabmap_ros)**  
 
-### 4. Install Additional Dependencies
+### **4. Install Additional Dependencies**  
 
 ```bash
 cd ~/ros2_ws
@@ -137,7 +109,7 @@ sudo apt install -y ros-humble-nav2-bringup ros-humble-slam-toolbox \
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-### 5. Build the Workspace
+### **5. Build the Workspace**  
 
 ```bash
 cd ~/ros2_ws
@@ -145,57 +117,53 @@ colcon build
 source ~/ros2_ws/install/setup.bash
 ```
 
-## Usage
+---
 
-### Mapping Mode
+## **Usage**  
 
-Mapping mode allows the robot to autonomously explore and build a comprehensive visual SLAM map of the environment.
+### **Mapping Mode**  
 
-#### Launch Mapping
+This mode allows the robot to **autonomously explore** and **build a map**.  
+
+#### **1. Launch Mapping**  
 
 ```bash
 ros2 launch tortoise_gazebo rtab_tortoise.launch.py
 ```
 
-#### Configuration Options
+#### **2. Manually Drive the Robot for Proper Mapping**  
 
-- **Resolution**: Adjust map resolution with the `map_resolution:=0.05` parameter (default: 0.05m).
-- **Custom Parameters**: Override RTAB-Map parameters using the `params_file:=/path/to/params.yaml` option.
-- **LiDAR Configuration**: Set LiDAR parameters with `lidar_enabled:=true lidar_range:=10.0`.
-
-#### Map Management
-
-Generated maps are stored in `~/.ros/rtabmap.db` by default. To specify a custom location:
+Open a **new terminal** and run:  
 
 ```bash
-ros2 launch tortoise_gazebo rtab_tortoise.launch.py 
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-### Localization Mode
+Use the **keyboard controls** to move the robot around the world and ensure a complete map.  
 
-Once mapping is complete, the saved map is used for efficient localization within the environment.
+#### **3. Check for Loop Closure (Important!)**  
 
-#### Launch Localization
+- In **RTAB-Map**, go to the **View** tab and select **Statistics**.  
+- It is **essential** to have **at least one loop closure** for localization to work.  
+- If no loop closure is detected, **revisit previous locations** to improve map consistency.  
+
+---
+
+### **Localization Mode**  
+
+Once the mapping is complete, use the saved map for localization.  
+
+#### **Launch Localization**  
 
 ```bash
-ros2 launch tortoise_gazebo rtab_tortoise.launch.py localization:=True 
+ros2 launch tortoise_gazebo rtab_tortoise.launch.py localization:=True
 ```
 
-## System Architecture
+---
 
-The system architecture is modular and integrates several key components:
+## **System Architecture**  
 
-### Core Components
-
-- **RTAB-Map Node**: Central component managing visual SLAM processes, the map database, and localization.
-- **Camera Interface**: Handles RGB-D sensor data acquisition and preprocessing.
-- **LiDAR Processing**: Filters and processes LiDAR scans for point cloud registration.
-- **Odometry Estimator**: Fuses wheel odometry with visual and LiDAR odometry for robust pose estimation.
-- **Map Server**: Provides map data to navigation components.
-- **Navigation Stack**: Leverages Nav2 for path planning and obstacle avoidance.
-
-
-### Integration Diagram
+The system integrates multiple components, as shown in the diagram:  
 
 ```
 ┌────────────────┐    ┌─────────────────┐    ┌───────────────┐
@@ -217,63 +185,34 @@ The system architecture is modular and integrates several key components:
                      └───────────────────────────────────────┘
 ```
 
+---
 
-### Real-World vs. Simulation
+## **Troubleshooting**  
 
-- Lighting conditions affect feature extraction quality in real-world deployments.
-- Sensor noise requires additional filtering on physical hardware.
-- Processing latency impacts real-time operation more significantly on robot hardware.
-- LiDAR reflectivity issues may affect point cloud quality on certain surfaces.
+### **Common Issues**  
 
-## Troubleshooting
+#### **Poor Localization Accuracy**  
+- Ensure the environment has **sufficient visual features**.  
+- Verify **camera and LiDAR calibration**.  
+- Check **loop closure statistics**.  
 
-### Common Issues
+#### **High CPU/Memory Usage**  
+- Reduce **map resolution**.  
+- Decrease **RGB-D image processing rate**.  
+- Enable **point cloud downsampling**.  
 
-#### Poor Localization Accuracy
-- Ensure sufficient visual features in the environment.
-- Verify camera and LiDAR calibration parameters.
-- Adjust feature extraction parameters in the configuration file.
-- Check LiDAR scan filtering parameters.
+#### **Build Issues**  
+- If you face issues with `colcon build --symlink-install`, try:  
 
-#### High CPU/Memory Usage
-- Reduce the map resolution parameter.
-- Decrease the RGB-D image processing rate.
-- Enable downsampling of point clouds.
-- Adjust the LiDAR scan rate.
-
-#### Database Corruption
-- Always use the backup database created automatically in `~/.ros/rtabmap.db.backup`.
-- Ensure proper shutdown of the RTAB-Map node before terminating.
-
-#### Build Issues
-- If you encounter problems with `colcon build --symlink-install`, try using the standard build command instead:
   ```bash
   colcon build
   ```
-- This creates a full copy rather than symbolic links, which can resolve certain path-related issues.
 
-#### Simulation Launch Failures
-- If Gazebo or RViz fail to launch properly, first try terminating the process with Ctrl+C and restarting.
-- For persistent launch issues, kill any remaining processes:
+#### **Simulation Launch Failures**  
+- If **Gazebo or RViz fails to launch**, terminate stuck processes:  
+
   ```bash
   pkill -9 -f gz
   pkill -9 -f ros2
   ```
-- Then attempt to relaunch the simulation.
-- Ensure X11 forwarding is properly configured when launching visualizations over SSH.
 
-### Diagnostic Tools
-
-- **Visualization**: Run the built-in visualizer with:
-  ```bash
-  ros2 run rtabmap_ros rtabmap --visualize
-  ```
-- **TF Tree Monitoring**: Check sensor fusion quality with:
-  ```bash
-  ros2 run rqt_tf_tree rqt_tf_tree
-  ```
-- **Topic Monitoring**: Inspect data flow with:
-  ```bash
-  ros2 topic list
-  ros2 topic echo /rtabmap/odom
-  ```
