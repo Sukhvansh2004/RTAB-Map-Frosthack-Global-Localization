@@ -1,3 +1,6 @@
+Below is the updated full **README.md** file with all the requested modifications, including the YouTube demo, loop closure image, and proper localization image.
+
+---
 
 # **Autonomous Initial Localization with RTAB-Map**  
 
@@ -147,6 +150,10 @@ Use the **keyboard controls** to move the robot around the world and ensure a co
 - It is **essential** to have **at least one loop closure** for localization to work.  
 - If no loop closure is detected, **revisit previous locations** to improve map consistency.  
 
+✅ **Example**: The statistics panel should show **at least one loop closure** as illustrated below:  
+
+![Mapping with Loop Closure](images/statistics_rtabmap_viz.png)
+
 ---
 
 ### **Localization Mode**  
@@ -158,6 +165,10 @@ Once the mapping is complete, use the saved map for localization.
 ```bash
 ros2 launch tortoise_gazebo rtab_tortoise.launch.py localization:=True
 ```
+
+✅ **Example**: Proper localization after mapping should appear as follows:
+
+![Proper Localization](images/localization_example.png)
 
 ---
 
@@ -216,3 +227,35 @@ The system integrates multiple components, as shown in the diagram:
   pkill -9 -f ros2
   ```
 
+---
+
+## **Additional Demo**  
+
+Watch a **small demonstration** of mapping the world with RTAB-Map on YouTube:  
+
+[![RTAB-Map Mapping Demo](https://img.youtube.com/vi/FPLTNIayfxk/0.jpg)](https://www.youtube.com/watch?v=FPLTNIayfxk)  
+
+Click the image to view the demo video!
+
+---
+
+## **Performance Considerations**  
+
+- **Mapping and Localization Efficiency**: Ensure that sensor data rates and processing parameters are tuned for your hardware capabilities.  
+- **Memory Management**: Use downsampling and resolution adjustments to balance mapping fidelity and computational load.  
+
+---
+
+## **License**  
+
+This project is open-source under the **MIT License**.  
+
+🚀 **Happy Mapping and Localization!** 🚀
+
+---
+
+### **Notes on Image Paths**  
+- Ensure that the images `mapping_loop_closure.png` and `proper_localization.png` are placed inside an **`images/`** folder within your repository.  
+- Verify that the image paths are correct so that GitHub can display them properly.
+
+Feel free to adjust any details as needed for your specific setup!
