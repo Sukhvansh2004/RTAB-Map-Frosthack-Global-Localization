@@ -40,12 +40,6 @@ Although RTAB-Map is primarily known for visual SLAM, our implementation leverag
 
 The fusion of RGB-D and LiDAR data is performed using RTAB-Map's multi-sensor registration capabilities, resulting in more accurate and complete environmental maps than either sensor could provide independently.
 
-### Technical Capabilities
-
-- **Online & Offline Processing**: Supports both real-time SLAM during operation and post-processing refinement for map optimization.
-- **3D Point Cloud Generation**: Creates dense, colorized point clouds for detailed environmental modeling.
-- **6-DoF Pose Estimation**: Provides accurate six-degree-of-freedom localization crucial for complex navigation tasks.
-- **ROS Integration**: Offers comprehensive compatibility with ROS 1 and ROS 2 ecosystems, facilitating easy integration with existing robotic workflows.
 
 ### Loop Closure and Navigation in Detail
 
