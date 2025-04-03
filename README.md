@@ -89,10 +89,7 @@ git clone https://github.com/Sukhvansh2004/RTAB-Map-Frosthack-Global-Localizatio
 ### **3. Install RTAB-Map ROS Package**  
 
 ```bash
-cd ~/ros2_ws/src
-git clone https://github.com/introlab/rtabmap.git
-git clone --branch ros2 https://github.com/introlab/rtabmap_ros.git
-cd ..
+sudo apt install ros-humble-rtabmap-ros
 ```
 
 For detailed installation instructions, visit the official RTAB-Map ROS repository:  
